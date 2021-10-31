@@ -1,4 +1,4 @@
-FROM jerryin/zerotier:1.6.6
+FROM jerryin/zerotier:1.8.1
 
 EXPOSE 9993/udp
 
