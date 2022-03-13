@@ -1,4 +1,10 @@
-FROM jerryin/zerotier:1.8.4
+ARG ALPINE_VERSION=edge
+
+FROM alpine:${ALPINE_VERSION}
+
+ARG ZT_VERSION=1.8.4-r0
+
+RUN apk add --no-cache zerotier-one=${ZT_VERSION}
 
 EXPOSE 9993/udp
 

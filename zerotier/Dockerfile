@@ -1,23 +1,9 @@
-FROM alpine:3.13 as builder
+ARG ALPINE_VERSION=edge
 
-ENV ZEROTIER_VERSION=1.8.4
+FROM alpine:${ALPINE_VERSION}
 
-RUN apk add --update alpine-sdk linux-headers \
-  && git clone --depth 1 --branch ${ZEROTIER_VERSION} https://github.com/zerotier/ZeroTierOne.git /src \
-  && cd /src \
-  && make -f make-linux.mk
+ARG ZT_VERSION=1.8.4-r0
 
-FROM alpine:3.13
-LABEL version="1.8.4"
-LABEL description="ZeroTier One as Docker Image"
+RUN apk add --no-cache zerotier-one=${ZT_VERSION}
 
-RUN apk add --update --no-cache libc6-compat libstdc++
-
-EXPOSE 9993/udp
-
-COPY --from=builder /src/zerotier-one /usr/sbin/
-RUN mkdir -p /var/lib/zerotier-one \
-  && ln -s /usr/sbin/zerotier-one /usr/sbin/zerotier-idtool \
-  && ln -s /usr/sbin/zerotier-one /usr/sbin/zerotier-cli
-
-ENTRYPOINT ["zerotier-one"]
+ENTRYPOINT ["/usr/sbin/zerotier-one"]
