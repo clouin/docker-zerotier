@@ -99,3 +99,16 @@ services:
     command: -4 1.2.3.4
 
 ```
+
+## Build docker image
+
+```bash
+# create builder
+docker buildx create --use --name mybuilder
+docker buildx inspect mybuilder --bootstrap
+
+# build zerotier
+docker buildx build -t jerryin/zerotier --platform=linux/arm64,linux/amd64 . --push
+# build zerotier-moon
+docker buildx build -t jerryin/zerotier-moon --platform=linux/arm64,linux/amd64 . --push
+```
