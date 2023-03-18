@@ -6,7 +6,7 @@ RUN apk add --no-cache openssl-dev zerotier-one=${ZT_VERSION}
 
 EXPOSE 9993/udp
 
-COPY startup.sh /usr/bin/
+COPY ./zerotier-moon/startup.sh /usr/bin/
 RUN chmod +x /usr/bin/startup.sh
 
 ENTRYPOINT ["startup.sh"]

@@ -1,10 +1,12 @@
-# zerotier-docker
+# Docker ZeroTier
 
-## zerotier
+## ZeroTier
 
 ### Description
 
-This is a container based on a lightweight Alpine Linux image and a copy of ZeroTier One. It's designed to allow you to run ZeroTier One as a service on container-oriented distributions like Fedora CoreOS, though it should work on any Linux system with Docker or Podman.
+This is a container based on a lightweight Alpine Linux image and a copy of ZeroTier One. It's designed to allow you to
+run ZeroTier One as a service on container-oriented distributions like Fedora CoreOS, though it should work on any Linux
+system with Docker or Podman.
 
 ### Start
 
@@ -13,9 +15,13 @@ docker run --name zerotier-one -d --restart always --device=/dev/net/tun --net=h
   --cap-add=SYS_ADMIN -v /var/lib/zerotier-one:/var/lib/zerotier-one jerryin/zerotier
 ```
 
-This runs `jerryin/zerotier` in a container with special network admin permissions and with access to the host's network stack (no network isolation) and `/dev/net/tun` to create tun/tap devices. This will allow it to create zt# interfaces on the host the way a copy of ZeroTier One running on the host would normally be able to.
+This runs `jerryin/zerotier` in a container with special network admin permissions and with access to the host's network
+stack (no network isolation) and `/dev/net/tun` to create tun/tap devices. This will allow it to create zt# interfaces
+on the host the way a copy of ZeroTier One running on the host would normally be able to.
 
-It also mounts `/var/lib/zerotier-one` to `/var/lib/zerotier-one` inside the container, allowing your service container to persist its state across restarts of the container itself. If you don't do this it'll generate a new identity every time. You can put the actual data somewhere other than `/var/lib/zerotier-one` if you want.
+It also mounts `/var/lib/zerotier-one` to `/var/lib/zerotier-one` inside the container, allowing your service container
+to persist its state across restarts of the container itself. If you don't do this it'll generate a new identity every
+time. You can put the actual data somewhere other than `/var/lib/zerotier-one` if you want.
 
 To join a zerotier network you can use
 
@@ -29,7 +35,7 @@ Or create an empty file with the network as name
 /var/lib/zerotier-one/networks.d/8056c2e21c000001.conf
 ```
 
-## zerotier-moon
+## ZeroTier Moon
 
 A docker image to create ZeroTier moon in one setp.
 
@@ -56,7 +62,8 @@ docker logs zerotier-moon
 ```
 
 **Notice:**
-When creating a new container, a new moon id will be generated. To persist the identity when creating a new container, see **Mount ZeroTier conf folder** below.
+When creating a new container, a new moon id will be generated. To persist the identity when creating a new container,
+see **Mount ZeroTier conf folder** below.
 
 ### Advanced usage
 
@@ -72,7 +79,8 @@ docker exec zerotier-moon zerotier-cli
 docker run --name zerotier-moon -d -p 9993:9993/udp -v ~/somewhere:/var/lib/zerotier-one jerryin/zerotier-moon -4 1.2.3.4
 ```
 
-This will mount `~/somewhere` to `/var/lib/zerotier-one` inside the container, allowing your ZeroTier moon to presist the same moon id.  If you don't do this, when you start a new container, a new moon id will be generated.
+This will mount `~/somewhere` to `/var/lib/zerotier-one` inside the container, allowing your ZeroTier moon to presist
+the same moon id. If you don't do this, when you start a new container, a new moon id will be generated.
 
 #### IPv6 support
 
@@ -108,7 +116,12 @@ docker buildx create --use --name mybuilder
 docker buildx inspect mybuilder --bootstrap
 
 # build zerotier
-docker buildx build -t jerryin/zerotier --platform=linux/arm64,linux/amd64 . --push
+bash build/build-zerotier.sh jerryin/zerotier
+# build multi-platform zerotier and push
+bash build/build-zerotier.sh jerryin/zerotier buildx
+
 # build zerotier-moon
-docker buildx build -t jerryin/zerotier-moon --platform=linux/arm64,linux/amd64 . --push
+bash build/build-zerotier-moon.sh jerryin/zerotier-moon
+# build multi-platform zerotier-moon and push
+bash build/build-zerotier-moon.sh jerryin/zerotier-moon buildx
 ```
